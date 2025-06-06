@@ -235,20 +235,14 @@ export default function Header() {
                         : "",
                     )}>{item.name}</NavigationMenuTrigger>
                   ) : (
-                    <Link href={item.href} legacyBehavior passHref>
-                      <NavigationMenuLink
-                        className={cn(
-                          "px-3 py-2 lg:px-6 lg:py-2 rounded-full text-xs lg:text-sm font-medium transition-colors",
-                          "bg-gray-100 hover:bg-gray-200 text-gray-900",
-                          "dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700",
-                          pathname === item.href
-                            ? "bg-blue-600 text-white hover:bg-blue-700 dark:bg-blue-600 dark:hover:bg-blue-700"
-                            : "",
-                        )}
-                      >
-                        {item.name}
-                      </NavigationMenuLink>
-                    </Link>
+                    <Link href={item.href} className={cn(
+                      "px-3 py-2 lg:px-6 lg:py-2 rounded-full text-xs lg:text-sm font-medium transition-colors",
+                      "bg-gray-100 hover:bg-gray-200 text-gray-900",
+                      "dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700",
+                      pathname === item.href
+                        ? "bg-blue-600 text-white hover:bg-blue-700 dark:bg-blue-600 dark:hover:bg-blue-700"
+                        : "",
+                    )}>{item.name}</Link>
                   )}
                   {item.dropdown && (
                     <NavigationMenuContent className="flex bg-gray-800 text-gray-200 border border-gray-700 rounded-md shadow-lg p-0 w-[300px] lg:w-[600px]">
@@ -293,12 +287,8 @@ export default function Header() {
                           <ul className="space-y-1">
                              {item.dropdown[hoveredCategoryIndex].services.map((service, srvIdx) => (
                                   <li key={srvIdx}>
-                                      <Link href={service.href} legacyBehavior passHref>
-                                        <NavigationMenuLink
-                                          className="block px-3 py-2 rounded-md text-sm text-gray-200 hover:bg-gray-700 hover:text-blue-500 transition-colors"
-                                        >
-                                          {service.name}
-                                        </NavigationMenuLink>
+                                      <Link href={service.href} className="block px-3 py-2 rounded-md text-sm text-gray-200 hover:bg-gray-700 hover:text-blue-500 transition-colors">
+                                        {service.name}
                                       </Link>
                                   </li>
                               ))}
