@@ -21,9 +21,9 @@ export const InfoTabs: React.FC<InfoTabsProps> = ({ items }) => {
   const [selected, setSelected] = useState(0);
 
   return (
-    <div
-      className="flex flex-col md:flex-row rounded-3xl overflow-hidden border border-blue-400/40 shadow-xl"
-      style={{ background: 'black' }}
+    <div>
+      className="flex flex-col md:flex-row rounded-3xl bg-black overflow-hidden border border-blue-400 dark:border-blue-400/40 shadow-xl"
+
     >
       {/* Left: Tab List */}
       <div
@@ -54,7 +54,10 @@ export const InfoTabs: React.FC<InfoTabsProps> = ({ items }) => {
       </div>
 
       {/* Right: Tab Content */}
-      <div className="md:w-1/2 w-full bg-black flex flex-col justify-center items-center p-10 relative">
+
+
+      <div className="md:w-1/2 w-full bg-gray-50 dark:bg-black flex flex-col justify-center items-center p-10 relative">
+
         <AnimatePresence mode="wait">
           <motion.div
             key={selected}
@@ -83,10 +86,10 @@ export const InfoTabs: React.FC<InfoTabsProps> = ({ items }) => {
                     {items[selected].icon}
                   </div>
             )}
-            <h2 className="text-3xl font-bold text-white mb-4">
+            <h2 className="text-3xl font-bold text-black dark:text-white mb-4">
               {items[selected].title}
             </h2>
-            <p className="text-lg text-neutral-200">{items[selected].description}</p>
+            <p className="text-lg text-gray-600 dark:text-neutral-200">{items[selected].description}</p>
           </motion.div>
         </AnimatePresence>
       </div>

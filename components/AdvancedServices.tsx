@@ -61,24 +61,23 @@ const fadeVariants = {
 const AUTO_PLAY_DELAY = 5000;
 
 const AdvancedServices = () => {
-  const [activeIndex, setActiveIndex] = useState(0);
-  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const [active, setActive] = useState(0);
 
-  // Autoplay logic
+  const handleNext = () => {
+    setActive((prev) => (prev + 1) % cards.length);
+  };
+
+  const handlePrev = () => {
+    setActive((prev) => (prev - 1 + cards.length) % cards.length);
+  };
+
   useEffect(() => {
-    if (timeoutRef.current) clearTimeout(timeoutRef.current);
-    timeoutRef.current = setTimeout(() => {
-      setActiveIndex((prev) => (prev + 1) % cards.length);
-    }, AUTO_PLAY_DELAY);
-    return () => {
-      if (timeoutRef.current) clearTimeout(timeoutRef.current);
-    };
-  }, [activeIndex]);
+    const interval = setInterval(handleNext, AUTO_PLAY_DELAY);
+    return () => clearInterval(interval);
+  }, []);
 
-  // Manual navigation
-  const goTo = (idx: number) => setActiveIndex(idx);
-  const goPrev = () => setActiveIndex((prev) => (prev - 1 + cards.length) % cards.length);
-  const goNext = () => setActiveIndex((prev) => (prev + 1) % cards.length);
+  const isActive = (index: number) => index === active;
+  const randomRotateY = () => Math.floor(Math.random() * 21) - 10;
 
   return (
     <section className="py-12 md:py-16 bg-gray-50 dark:bg-gray-800">
@@ -90,69 +89,107 @@ const AdvancedServices = () => {
           </h2>
           <div className="h-1 w-20 bg-blue-600 dark:bg-blue-400 mx-auto mt-4"></div>
         </div>
-        <div className="relative max-w-xl md:max-w-4xl mx-auto px-4">
-          {/* Arrow Controls */}
-          <button
-            aria-label="Previous"
-            onClick={goPrev}
-            className="absolute top-2/4 left-0 z-10 -translate-y-2/4 bg-black/30 hover:bg-black/50 p-2 rounded-full"
-            style={{ transform: 'translateY(-50%)' }}
-          >
-            <ArrowLeftIcon className="w-6 h-6 text-white" />
-          </button>
-          <button
-            aria-label="Next"
-            onClick={goNext}
-            className="absolute top-2/4 right-0 z-10 -translate-y-2/4 bg-black/30 hover:bg-black/50 p-2 rounded-full"
-            style={{ transform: 'translateY(-50%)' }}
-          >
-            <ArrowRightIcon className="w-6 h-6 text-white" />
-          </button>
-          {/* Fade Animation Card */}
-          <div className="h-full min-h-[420px] flex items-center justify-center">
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={activeIndex}
-                variants={fadeVariants}
-                initial="initial"
-                animate="animate"
-                exit="exit"
-                className="relative bg-white dark:bg-gray-900 rounded-lg shadow-lg overflow-hidden group mx-auto max-w-sm md:max-w-2xl w-full"
-              >
-                <div className="relative w-full h-48 md:h-64">
+        <div className="relative max-w-xl md:max-w-4xl mx-auto px-4 grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+          {/* Animated Image */}
+          <div className="relative h-80 w-full">
+            <AnimatePresence>
+              {cards.map((card, index) => (
+                <motion.div
+                  key={card.image}
+                  initial={{
+                    opacity: 0,
+                    scale: 0.9,
+                    z: -100,
+                    rotate: randomRotateY(),
+                  }}
+                  animate={{
+                    opacity: isActive(index) ? 1 : 0.7,
+                    scale: isActive(index) ? 1 : 0.95,
+                    z: isActive(index) ? 0 : -100,
+                    rotate: isActive(index) ? 0 : randomRotateY(),
+                    zIndex: isActive(index) ? 40 : cards.length + 2 - index,
+                    y: isActive(index) ? [0, -80, 0] : 0,
+                  }}
+                  exit={{
+                    opacity: 0,
+                    scale: 0.9,
+                    z: 100,
+                    rotate: randomRotateY(),
+                  }}
+                  transition={{
+                    duration: 0.4,
+                    ease: "easeInOut",
+                  }}
+                  className="absolute inset-0 origin-bottom"
+                >
                   <img
-                    src={cards[activeIndex].image}
-                    alt={cards[activeIndex].title}
-                    className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                    src={card.image}
+                    alt={card.title}
+                    width={500}
+                    height={500}
+                    draggable={false}
+                    className="h-full w-full rounded-3xl object-cover object-center"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-                  <div className="absolute bottom-4 left-4 p-2 bg-blue-600 dark:bg-blue-800 rounded-md flex items-center justify-center">
-                    <Plus className="h-6 w-6 text-white" />
-                  </div>
-                </div>
-                <div className="p-6 md:p-8 text-center">
-                  <h3 className="text-xl md:text-2xl font-semibold text-gray-900 dark:text-white mb-2 md:mb-4">{cards[activeIndex].title}</h3>
-                  <p className="text-gray-600 dark:text-gray-400 mb-4 md:mb-6 text-base md:text-lg">{cards[activeIndex].description}</p>
-                  <Link 
-                    href={cards[activeIndex].href} 
-                    className="inline-flex items-center text-blue-600 dark:text-blue-400 hover:underline text-base md:text-lg font-medium"
-                  >
-                    Read More <span className="ml-2">&#x2192;</span>
-                  </Link>
-                </div>
-              </motion.div>
+                </motion.div>
+              ))}
             </AnimatePresence>
           </div>
-          {/* Navigation Dots */}
-          <div className="flex justify-center gap-2 md:gap-3 mt-4 md:mt-6">
-            {cards.map((_, i) => (
+          {/* Animated Text */}
+          <div className="flex flex-col justify-between py-4">
+            <motion.div
+              key={active}
+              initial={{ y: 20, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              exit={{ y: -20, opacity: 0 }}
+              transition={{ duration: 0.2, ease: "easeInOut" }}
+            >
+              <h3 className="text-2xl font-bold text-black dark:text-white">
+                {cards[active].title}
+              </h3>
+              <motion.p className="mt-8 text-lg text-gray-500 dark:text-neutral-300">
+                {cards[active].description.split(" ").map((word, index) => (
+                  <motion.span
+                    key={index}
+                    initial={{ filter: "blur(10px)", opacity: 0, y: 5 }}
+                    animate={{ filter: "blur(0px)", opacity: 1, y: 0 }}
+                    transition={{ duration: 0.2, ease: "easeInOut", delay: 0.02 * index }}
+                    className="inline-block"
+                  >
+                    {word}&nbsp;
+                  </motion.span>
+                ))}
+              </motion.p>
+              <Link 
+                href={cards[active].href} 
+                className="inline-flex items-center text-blue-600 dark:text-blue-400 hover:underline text-base md:text-lg font-medium mt-6"
+              >
+                Read More <span className="ml-2">&#x2192;</span>
+              </Link>
+            </motion.div>
+            <div className="flex gap-4 pt-12 md:pt-0">
               <button
-                key={i}
-                className={`h-3 w-3 rounded-full transition-colors ${activeIndex === i ? 'bg-blue-600 dark:bg-blue-400' : 'bg-gray-300 dark:bg-gray-600'}`}
-                onClick={() => goTo(i)}
-                aria-label={`Go to slide ${i + 1}`}
-              />
-            ))}
+                onClick={handlePrev}
+                className="group/button flex h-7 w-7 items-center justify-center rounded-full bg-gray-100 dark:bg-neutral-800"
+              >
+                <ArrowLeftIcon className="h-5 w-5 text-black transition-transform duration-300 group-hover/button:rotate-12 dark:text-neutral-400" />
+              </button>
+              <button
+                onClick={handleNext}
+                className="group/button flex h-7 w-7 items-center justify-center rounded-full bg-gray-100 dark:bg-neutral-800"
+              >
+                <ArrowRightIcon className="h-5 w-5 text-black transition-transform duration-300 group-hover/button:-rotate-12 dark:text-neutral-400" />
+              </button>
+            </div>
+            <div className="flex justify-center gap-2 md:gap-3 mt-4 md:mt-6">
+              {cards.map((_, i) => (
+                <button
+                  key={i}
+                  className={`h-3 w-3 rounded-full transition-colors ${active === i ? 'bg-blue-600 dark:bg-blue-400' : 'bg-gray-300 dark:bg-gray-600'}`}
+                  onClick={() => setActive(i)}
+                  aria-label={`Go to slide ${i + 1}`}
+                />
+              ))}
+            </div>
           </div>
         </div>
       </div>
