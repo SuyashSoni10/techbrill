@@ -3,10 +3,11 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
-import PageHeader from '@/components/page-header';
 import { Button } from '@/components/ui/button';
-import { ArrowRight, Bug, Shield, Users, Target, Briefcase } from 'lucide-react';
+import { ArrowRight, Bug, Shield, Users, Target, Briefcase, CheckCircle } from 'lucide-react';
 import { ErrorBoundary } from '@/components/error-boundary';
+import { Carousel, CarouselContent, CarouselItem } from '@/components/ui/carousel';
+import Autoplay from 'embla-carousel-autoplay';
 
 const fadeInUp = {
   initial: { opacity: 0, y: 20 },
@@ -26,50 +27,123 @@ export default function SoftwareQATestingPage() {
   return (
     <ErrorBoundary>
       <div>
-        <PageHeader 
-          title="Software QA & Testing" 
-          description="Ensuring quality and reliability in every line of code"
-        />
+        {/* Hero Section with Background Image */}
+        <section className="relative h-[350px] md:h-[400px] flex items-center justify-center overflow-hidden group">
+          <Image
+            src="/images/services/qa-testing-hero.jpg"
+            alt="Software QA & Testing Hero"
+            fill
+            className="object-cover object-center transition-transform duration-700 group-hover:scale-105 z-0"
+            priority
+          />
+          <div className="absolute inset-0 bg-black/60 z-10 transition-opacity duration-300 group-hover:bg-black/70" />
+          <div className="relative z-20 flex flex-col items-center justify-center w-full text-center px-4">
+            <h1 className="text-4xl md:text-6xl font-bold text-white mb-4">Software QA & Testing</h1>
+            <p className="text-lg md:text-2xl text-white/90">Ensuring quality and reliability in every line of code</p>
+          </div>
+        </section>
 
-        {/* Service Explanation Section */}
-        <section className="py-16 bg-gray-50 dark:bg-gray-900">
-          <div className="container">
-            <motion.div
-              initial="initial"
-              whileInView="animate"
-              viewport={{ once: true }}
-              variants={fadeInUp}
-            >
-              <h2 className="text-3xl font-bold mb-8">What We Do in Software QA & Testing</h2>
-              <p className="text-lg text-gray-700 dark:text-gray-300 mb-6">
-                In today&apos;s fast-paced digital world, software quality is non-negotiable. At TechBrill Solutions, we understand that even the smallest bug can have significant consequences for your business. Our comprehensive software QA and testing services ensure that your applications are reliable, secure, and deliver an exceptional user experience.
-              </p>
-              <p className="text-lg text-gray-700 dark:text-gray-300 mb-6">
-                We employ a rigorous testing methodology that covers every aspect of your software, from functionality and performance to security and user experience. Our team of experienced QA engineers uses both manual and automated testing techniques to identify and resolve issues before they impact your users.
-              </p>
-              <p className="text-lg text-gray-700 dark:text-gray-300">
-                Whether you&apos;re developing a new application or maintaining an existing one, our QA services help you deliver software that meets the highest standards of quality and reliability.
-              </p>
-            </motion.div>
-            
-            <motion.div 
-              className="mt-8 text-center"
-              initial={{ opacity: 0, scale: 0.9 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5 }}
-            >
-              <div className="relative w-full max-w-4xl mx-auto aspect-video">
-                <Image 
-                  src="/images/services/qa-testing-hero.jpg" 
-                  alt="Software QA and Testing" 
-                  fill
-                  className="object-cover rounded-lg shadow-lg"
-                  priority
-                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 1200px"
-                />
+        {/* Service Explanation Section - Minimal alternating layout with working images */}
+        <section className="py-16 bg-gray-900">
+          <div className="container space-y-12">
+            {/* Block 1: Image Left, Text Right */}
+            <div className="flex flex-col md:flex-row items-center p-6 md:p-12 gap-8">
+              {/* Carousel Left */}
+              <div className="w-full md:w-1/2">
+                <Carousel opts={{ align: 'start', loop: true }} plugins={[Autoplay({ delay: 2500 })]}>
+                  <CarouselContent>
+                    <CarouselItem className="h-64 md:h-80">
+                      <div className="relative w-full h-full rounded-lg overflow-hidden shadow-md">
+                        <Image src="/images/services/myriam-jessier-eveI7MOcSmw-unsplash.jpg" alt="QA & Testing Slide 1" fill className="object-cover object-center" />
+                      </div>
+                    </CarouselItem>
+                    <CarouselItem className="h-64 md:h-80">
+                      <div className="relative w-full h-full rounded-lg overflow-hidden shadow-md">
+                        <Image src="/images/services/qa-testing-hero.jpg" alt="QA & Testing Slide 2" fill className="object-cover object-center" />
+                      </div>
+                    </CarouselItem>
+                  </CarouselContent>
+                </Carousel>
               </div>
-            </motion.div>
+              {/* Text Right */}
+              <div className="w-full md:w-1/2">
+                <h2 className="text-2xl md:text-3xl font-bold mb-4 text-white">What We Do in Software QA & Testing</h2>
+                <p className="text-base md:text-lg text-gray-200 mb-4">
+                  In today&apos;s fast-paced digital world, software quality is non-negotiable. At TechBrill Solutions, we understand that even the smallest bug can have significant consequences for your business. Our comprehensive software QA and testing services ensure that your applications are reliable, secure, and deliver an exceptional user experience.
+                </p>
+                <p className="text-base md:text-lg text-gray-200">
+                  We employ a rigorous testing methodology that covers every aspect of your software, from functionality and performance to security and user experience. Our team of experienced QA engineers uses both manual and automated testing techniques to identify and resolve issues before they impact your users.
+                </p>
+              </div>
+            </div>
+            {/* Block 2: Text Left, Image Right */}
+            <div className="flex flex-col md:flex-row-reverse items-center p-6 md:p-12 gap-8">
+              {/* Carousel Right */}
+              <div className="w-full md:w-1/2">
+                <Carousel opts={{ align: 'start', loop: true }} plugins={[Autoplay({ delay: 2500 })]}>
+                  <CarouselContent>
+                    <CarouselItem className="h-64 md:h-80">
+                      <div className="relative w-full h-full rounded-lg overflow-hidden shadow-md">
+                        <Image src="/images/services/campaign-creators-pypeCEaJeZY-unsplash.jpg" alt="QA & Testing Slide 2" fill className="object-cover object-center" />
+                      </div>
+                    </CarouselItem>
+                    <CarouselItem className="h-64 md:h-80">
+                      <div className="relative w-full h-full rounded-lg overflow-hidden shadow-md">
+                        <Image src="/images/services/myriam-jessier-eveI7MOcSmw-unsplash.jpg" alt="QA & Testing Slide 3" fill className="object-cover object-center" />
+                      </div>
+                    </CarouselItem>
+                  </CarouselContent>
+                </Carousel>
+              </div>
+              {/* Text Left */}
+              <div className="w-full md:w-1/2">
+                <h2 className="text-2xl md:text-3xl font-bold mb-4 text-white">Automated & Manual Testing</h2>
+                <p className="text-base md:text-lg text-gray-200 mb-4">
+                  We offer both manual and automated testing services to ensure your software is robust and reliable. Our automation frameworks speed up testing cycles and improve coverage, while manual testing ensures a human touch for usability and edge cases.
+                </p>
+                <ul className="list-disc list-inside text-gray-200 space-y-2">
+                  <li>Functional Testing</li>
+                  <li>Performance Testing</li>
+                  <li>Security Testing</li>
+                  <li>Usability Testing</li>
+                  <li>Compatibility Testing</li>
+                </ul>
+              </div>
+            </div>
+            {/* Block 3: Image Left, Text Right */}
+            <div className="flex flex-col md:flex-row items-center p-6 md:p-12 gap-8">
+              {/* Carousel Left */}
+              <div className="w-full md:w-1/2">
+                <Carousel opts={{ align: 'start', loop: true }} plugins={[Autoplay({ delay: 2500 })]}>
+                  <CarouselContent>
+                    <CarouselItem className="h-64 md:h-80">
+                      <div className="relative w-full h-full rounded-lg overflow-hidden shadow-md">
+                        <Image src="/images/services/campaign-creators-pypeCEaJeZY-unsplash.jpg" alt="QA & Testing Slide 3" fill className="object-cover object-center" />
+                      </div>
+                    </CarouselItem>
+                    <CarouselItem className="h-64 md:h-80">
+                      <div className="relative w-full h-full rounded-lg overflow-hidden shadow-md">
+                        <Image src="/images/services/qa-testing-hero.jpg" alt="QA & Testing Slide 1" fill className="object-cover object-center" />
+                      </div>
+                    </CarouselItem>
+                  </CarouselContent>
+                </Carousel>
+              </div>
+              {/* Text Right */}
+              <div className="w-full md:w-1/2">
+                <h2 className="text-2xl md:text-3xl font-bold mb-4 text-white">QA Consulting & Strategy</h2>
+                <p className="text-base md:text-lg text-gray-200 mb-4">
+                  Our QA consulting services help you define the right testing strategy, select tools, and implement best practices for continuous quality improvement.
+                </p>
+                <ul className="list-disc list-inside text-gray-200 space-y-2">
+                  <li>Test Automation</li>
+                  <li>API Testing</li>
+                  <li>Mobile App Testing</li>
+                  <li>Load & Stress Testing</li>
+                  <li>Continuous Testing</li>
+                </ul>
+              </div>
+            </div>
           </div>
         </section>
 
@@ -136,6 +210,15 @@ export default function SoftwareQATestingPage() {
                 <Briefcase className="w-12 h-12 text-primary mb-4" />
                 <h3 className="text-xl font-semibold mb-3">Quality Assurance</h3>
                 <p className="text-gray-700 dark:text-gray-300">Maintain high standards of quality throughout the development process.</p>
+              </motion.div>
+
+              <motion.div 
+                className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow hover:shadow-xl transition-shadow"
+                variants={fadeInUp}
+              >
+                <CheckCircle className="w-12 h-12 text-primary mb-4" />
+                <h3 className="text-xl font-semibold mb-3">Regulatory Compliance</h3>
+                <p className="text-gray-700 dark:text-gray-300">Ensure your software meets industry standards and regulatory requirements for security, privacy, and accessibility.</p>
               </motion.div>
             </motion.div>
           </div>
