@@ -211,7 +211,7 @@ export default function ContentMarketingPage() {
                 <div className="container mx-auto px-6">
                     <div className="mb-16">
                         <motion.h2
-                            className="text-4xl md:text-5xl font-bold mb-8"
+                            className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-6"
                             initial={{ opacity: 0, y: 20 }}
                             whileInView={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.5 }}
